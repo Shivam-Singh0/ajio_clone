@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { MdFavoriteBorder } from "react-icons/md";
 import { PiBag } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
-import { addToWishList, inWishList, removeFromWishList } from "../../../redux/features/wishList";
+import { addToWishList, removeFromWishList } from "../../../redux/features/wishList";
 import { useEffect, useState } from "react";
 import { MdFavorite } from "react-icons/md";
 import { toast } from "react-toastify";
@@ -16,9 +16,10 @@ const Product = () => {
     const { state } = useLocation();
     const { product } = state;
 
-    const { loading, wishListed } = useSelector(state => state.wishList)
-    const [adding, setAdding] = useState(false)
-    const [removing, setRemoving] = useState(false)
+    const { wishList } = useSelector(state => state.wishList)
+    // const [adding, setAdding] = useState(false)
+    // const [removing, setRemoving] = useState(false)
+    const[wishlisted, wishlisted] = useState(false)
     const [addedToBag, setAddedToBag] = useState(false)
     const [authenticated, setAuthenticated] = useState(false);
 
@@ -70,16 +71,23 @@ const Product = () => {
     }
 
 
-    useEffect(() => {
+    // useEffect(() => {
        
-        dispatch(inWishList(product.id))
-        if (adding) {
-            setAdding(false)
+    //     dispatch(inWishList(product.id))
+    //     if (adding) {
+    //         setAdding(false)
+    //     }
+    //     if (removing) {
+    //         setRemoving(false)
+    //     }
+    // }, [dispatch, product, adding, removing])
+
+
+    useEffect(() => {
+        if(wishList.includes(product.id) {
+            setWishlisted(true);
         }
-        if (removing) {
-            setRemoving(false)
-        }
-    }, [dispatch, product, adding, removing])
+    },[])
 
 
 
@@ -123,9 +131,9 @@ const Product = () => {
                     )
                 }
                 {
-                    !loading && !wishListed ? (
+                    !wishListed ? (
                         <Button variant="outlined" className="flex justify-center text-ajio-gold border-ajio-gold gap-3 w-[50%] mx-auto  
-                mt-6 rounded-none" onClick={() => handleWish('add')} loading={adding} >
+                mt-6 rounded-none" onClick={() => handleWish('add')} >
 
                             <MdFavoriteBorder size={26} />
                             <p className="text-base font-light">Save To Whishlist</p>
@@ -133,7 +141,7 @@ const Product = () => {
                     ) :
                         (
                             <Button variant="outlined" className="flex justify-center text-ajio-gold border-ajio-gold gap-3 w-[50%] mx-auto  
-                mt-6 rounded-none" onClick={() => handleWish('remove')} loading={removing}>
+                mt-6 rounded-none" onClick={() => handleWish('remove')} >
 
                                 <MdFavorite size={26} />
                                 <p className="text-base font-light">Remove From Whishlist</p>
