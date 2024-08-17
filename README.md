@@ -53,4 +53,4 @@ This project is a web application inspired by Ajio, built using React, Redux Too
 
 ## Deployment
   deployed on vercel
-  https://amazon-music-ten.vercel.app/
+  https://ajio-clone-ten.vercel.app/
