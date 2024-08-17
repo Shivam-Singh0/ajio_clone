@@ -19,7 +19,7 @@ const Product = () => {
     const { wishList } = useSelector(state => state.wishList)
     // const [adding, setAdding] = useState(false)
     // const [removing, setRemoving] = useState(false)
-    const[wishlisted, wishlisted] = useState(false)
+    const[wishlisted, SetWishlisted] = useState(false)
     const [addedToBag, setAddedToBag] = useState(false)
     const [authenticated, setAuthenticated] = useState(false);
 
@@ -84,8 +84,8 @@ const Product = () => {
 
 
     useEffect(() => {
-        if(wishList.includes(product.id) {
-            setWishlisted(true);
+        if(wishList.includes(product.id)){
+            SetWishlisted(true);
         }
     },[])
 
