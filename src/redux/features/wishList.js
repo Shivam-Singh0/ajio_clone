@@ -23,7 +23,8 @@ const wishListSlice = createSlice({
 
         removeFromWishList: (state, action) => {
            
-            state.wishList.splice(action.payload-1, 1);
+            let index = state.wishList.indexOf(action.payload);
+            state.wishList.splice(index, 1);
             localStorage.setItem("wishList", JSON.stringify(state.wishList))
            
         },
