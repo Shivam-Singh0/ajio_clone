@@ -131,7 +131,7 @@ const Product = () => {
                     )
                 }
                 {
-                    !wishListed ? (
+                    !wishlisted ? (
                         <Button variant="outlined" className="flex justify-center text-ajio-gold border-ajio-gold gap-3 w-[50%] mx-auto  
                 mt-6 rounded-none" onClick={() => handleWish('add')} >
 
