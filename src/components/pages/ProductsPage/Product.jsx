@@ -47,13 +47,13 @@ const Product = () => {
             return;
         }
         if (action === "add") {
-            setAdding(true)
+            
             dispatch(addToWishList(product.id))
             toast.success("Added to wishlist")
 
         }
         else {
-            setRemoving(true)
+            
             dispatch(removeFromWishList(product.id))
             toast.success("Removed from wishlist")
 
