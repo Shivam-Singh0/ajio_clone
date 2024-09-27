@@ -27,6 +27,7 @@ const wishListSlice = createSlice({
             state.wishList.splice(index, 1);
             localStorage.setItem("wishList", JSON.stringify(state.wishList))
            
+           
         },
         resetWishList: (state) => {
             state.wishList = []
@@ -35,6 +36,6 @@ const wishListSlice = createSlice({
     }
 })
 
-export const {addToWishList, inWishList, resetWishList, removeFromWishList} = wishListSlice.actions;
+export const {addToWishList,  resetWishList, removeFromWishList} = wishListSlice.actions;
 
 export default wishListSlice.reducer
