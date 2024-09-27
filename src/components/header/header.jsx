@@ -15,7 +15,6 @@ import SearchBox from "./SearchBox";
 import { IoMdLogOut } from "react-icons/io";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { resetCart } from "../../redux/features/Cart";
 import  { resetWishList } from "../../redux/features/wishList";
 export function Header() {
     const [openNav, setOpenNav] = useState(false);
@@ -56,7 +55,7 @@ export function Header() {
     const logOutHandler = async () => {
         await auth.signOut();
         setAuthenticated(false);
-        dispatch(resetCart());
+        
         dispatch(resetWishList())
         navigate('')
         toast.success('Logged out successfully')

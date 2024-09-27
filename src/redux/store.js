@@ -2,18 +2,19 @@ import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { productsApi } from './apis/productsApiSlice';
 import  wishList  from './features/wishList'
-import cart from './features/Cart'
+import { cartApi } from './apis/cartApiSlice';
 
 
 
   const store = configureStore({
     reducer: {
       [productsApi.reducerPath]: productsApi.reducer,
+      [cartApi.reducerPath]: cartApi.reducer,
       'wishList': wishList,
-      'cart': cart
+      
     },
     middleware: getDefaultMiddleware =>
-      getDefaultMiddleware().concat(productsApi.middleware),
+      getDefaultMiddleware().concat(productsApi.middleware, cartApi.middleware),
     devTools: true,
    
   })

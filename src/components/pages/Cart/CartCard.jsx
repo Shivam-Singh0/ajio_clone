@@ -11,16 +11,19 @@ import {
 import { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import { useDispatch } from "react-redux";
-import { removeFromCart, updateQuantity } from "../../../redux/features/Cart";
+import { useRemoveFromCartMutation, useUpdateQuantityMutation } from "../../../redux/apis/cartApiSlice";
 
 
-export function CartCard({ id, title, image, price, qty }) {
+export function CartCard({ id, title, image, price, quantity: initialQuantity, token, refetch }) {
 
     const dispatch = useDispatch();
 
-    price = price * qty;
+   
+    const [quantity, setQuantity] = useState(initialQuantity);
+    const [updateQuantity, {isLoading: updating}] = useUpdateQuantityMutation();
+    const [removeFromCart, {isLoading: removing}] = useRemoveFromCartMutation();
+    price = price * quantity;
     price = new Intl.NumberFormat('en-IN').format(price)
-    const [quantity, setQuantity] = useState(qty);
     const increment = () => {
         setQuantity(quantity + 1);
     }
@@ -32,11 +35,17 @@ export function CartCard({ id, title, image, price, qty }) {
     }
 
     const updateHandler = () => {   
-        dispatch(updateQuantity({id, qty: quantity}))
+        updateQuantity({ token, productId: id, quantity })
+        
     }
+
     const removeHandler = () => {
-        dispatch(removeFromCart(id))
+        removeFromCart({ token, productId: id })
+        refetch()
+       
     }
+
+
 
     return (
 
@@ -60,7 +69,7 @@ export function CartCard({ id, title, image, price, qty }) {
                   
                     <Popover placement="bottom">
                         <PopoverHandler>
-                            <Button className="flex items-center bg-transparent p-0 text-black shadow-none gap-1"><p className="text-gray-700 font-light ">Qty</p> {qty}<IoIosArrowDown /></Button>
+                            <Button className="flex items-center bg-transparent p-0 text-black shadow-none gap-1"><p className="text-gray-700 font-light ">Qty</p> {quantity}<IoIosArrowDown /></Button>
                         </PopoverHandler>
                         <PopoverContent>
                             <p className="font-bold text-black my-4">Select Quantity</p>
@@ -70,7 +79,7 @@ export function CartCard({ id, title, image, price, qty }) {
                                 <p className=" text-center border rounded-full border-black p-1 w-8 h-8">{quantity}</p>
                                 <Button onClick={increment} className="text-2xl bg-transparent p-0 text-black shadow-none">+</Button>
                             </div>
-                            <Button className="bg-ajio-gold   p-2 text-white text-center mt-3 w-full" onClick={updateHandler}>Update</Button>
+                            <Button className="bg-ajio-gold   p-2 text-white text-center mt-3 w-full" onClick={updateHandler} loading={updating}>Update</Button>
                         </PopoverContent>
                     </Popover>
                 </div>
@@ -82,7 +91,7 @@ export function CartCard({ id, title, image, price, qty }) {
 
 
 
-                <button className="p-0 m-0 w-0 text-blue-800" onClick={removeHandler}>remove</button>
+                <button className="p-0 m-0 w-0 text-blue-800" onClick={removeHandler} disabled={removing}>remove</button>
             </CardBody>
         </Card>
 
