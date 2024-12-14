@@ -1,37 +1,42 @@
 import { Button, Typography } from "@material-tailwind/react";
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { MdFavoriteBorder } from "react-icons/md";
 import { PiBag } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
-import { addToWishList, removeFromWishList } from "../../../redux/features/wishList";
+
 import { useEffect, useMemo, useState } from "react";
 import { MdFavorite } from "react-icons/md";
 import { toast } from "react-toastify";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useAddToCartMutation, useGetCartQuery } from "../../../redux/apis/cartApiSlice";
+import { useAddToCartMutation, useGetCartQuery, useRemoveFromCartMutation } from "../../../redux/apis/cartApiSlice";
+import { useAddToWishlistMutation, useIsWishListedMutation, useRemoveFromWishlistMutation } from "../../../redux/apis/wishlistApiSlice";
 
 
 const Product = () => {
     const { state } = useLocation();
     const { product } = state;
-    const { wishList } = useSelector(state => state.wishList);
     const [wishlisted, setWishlisted] = useState(false);
     const [addedToBag, setAddedToBag] = useState(false);
     const [authenticated, setAuthenticated] = useState(false);
     const [token, setToken] = useState('');
     const [addToCart, { isLoading : addingToCart }] = useAddToCartMutation();
+
+    
+   const {id} = useParams()
+ 
     
     const auth = getAuth();
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    
+   const [addToWishList] = useAddToWishlistMutation();
+   const [isWishListed, { isLoading : isWishLoading}] = useIsWishListedMutation();
 
-    // Use memo to optimize the wishlist check
-    const isWishlisted = useMemo(() => wishList.includes(product.id), [wishList, product.id]);
+   const [removeFromWishList, {isLoading : removing}] = useRemoveFromWishlistMutation();
+
+   
     const {  refetch} = useGetCartQuery(token, {skip: !token});
 
-    useEffect(() => {
-        setWishlisted(isWishlisted);
-    }, [isWishlisted]);
+
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async(user) => {
@@ -42,7 +47,27 @@ const Product = () => {
 
         });
         return () => unsubscribe();
+
+       
     }, [auth]);
+
+    useEffect(() => {
+        const checkIfWishlisted = async () => {
+            if (token) {
+                try {
+                    const result = await isWishListed({ token, productId: id }).unwrap();
+                    setWishlisted(result); // Directly set the result from the backend
+                } catch (error) {
+                    console.error("Error checking wishlist status:", error);
+                    setWishlisted(false); // Default to false on error
+                }
+            }
+        };
+    
+        checkIfWishlisted(); // Call the function inside the effect
+    }, [token, id, isWishListed]); // Removed `isWishListedStatus` to avoid unnecessary loops
+
+
     
     let { price } = product;
     price = Math.round(price * 83.93);
@@ -54,12 +79,13 @@ const Product = () => {
             return;
         }
         if (action === "add") {
+            addToWishList({ token, data : {productId: id, title: product.title, image: product.image, price, rating : product.rating} }).unwrap();
             setWishlisted(true);
-            dispatch(addToWishList(product.id));
             toast.success("Added to wishlist");
         } else {
+            removeFromWishList({ token, productId: id }).unwrap();
             setWishlisted(false);
-            dispatch(removeFromWishList(product.id));
+          
             toast.success("Removed from wishlist");
         }
     };
@@ -71,7 +97,7 @@ const Product = () => {
             return;
         }
         try {
-            await addToCart({ token, data: {id: product._id, price, title: product.title, image: product.image} });
+            await addToCart({ token, data: { id, price, title: product.title, image: product.image} }).unwrap();
             setAddedToBag(true);
             toast.success("Added to bag");
             refetch();
@@ -128,6 +154,7 @@ const Product = () => {
                         className="flex justify-center text-ajio-gold border-ajio-gold gap-3 w-[50%] mx-auto  
                 mt-6 rounded-none"
                         onClick={() => handleWish("add")}
+                        loading={isWishLoading}
                     >
                         <MdFavoriteBorder size={26} />
                         <p className="text-base font-light">Save To Wishlist</p>
@@ -138,6 +165,7 @@ const Product = () => {
                         className="flex justify-center text-ajio-gold border-ajio-gold gap-3 w-[50%] mx-auto  
                 mt-6 rounded-none"
                         onClick={() => handleWish("remove")}
+                        loading={removing}
                     >
                         <MdFavorite size={26} />
                         <p className="text-base font-light">Remove From Wishlist</p>

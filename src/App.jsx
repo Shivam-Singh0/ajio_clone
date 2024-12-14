@@ -9,6 +9,7 @@ import Products from "./components/pages/ProductsPage/Products"
 import Product from "./components/pages/ProductsPage/Product"
 import WishList from "./components/pages/wishlist/WishList"
 import Bag from "./components/pages/Cart/Bag"
+import Success from "./components/pages/Cart/Success"
 
 function App() {
  
@@ -29,6 +30,7 @@ function App() {
         <Route path="/product/:id" element={<Product />} />
         <Route path="/wishlist" element={<WishList />} />
         <Route path="/bag" element={<Bag />} />
+        <Route path="/success" element={<Success />} />
       </Routes>
       </main>
     </Router>

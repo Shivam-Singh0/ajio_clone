@@ -1,8 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { productsApi } from './apis/productsApiSlice';
-import  wishList  from './features/wishList'
 import { cartApi } from './apis/cartApiSlice';
+import { wishlistApi } from './apis/wishlistApiSlice';
+import { addressApi } from './apis/addressApiSlice';
 
 
 
@@ -10,11 +11,13 @@ import { cartApi } from './apis/cartApiSlice';
     reducer: {
       [productsApi.reducerPath]: productsApi.reducer,
       [cartApi.reducerPath]: cartApi.reducer,
-      'wishList': wishList,
+      [wishlistApi.reducerPath]: wishlistApi.reducer,
+      [addressApi.reducerPath] : addressApi.reducer
+      
       
     },
     middleware: getDefaultMiddleware =>
-      getDefaultMiddleware().concat(productsApi.middleware, cartApi.middleware),
+      getDefaultMiddleware().concat(productsApi.middleware, cartApi.middleware, wishlistApi.middleware, addressApi.middleware),
     devTools: true,
    
   })

@@ -32,6 +32,7 @@ const Products = () => {
                             <ProductCard 
                                 product={product} 
                                 key={index}
+                                id={product._id}
                             />
                         
                     ))

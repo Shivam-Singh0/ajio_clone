@@ -20,8 +20,9 @@ export function CartCard({ id, title, image, price, quantity: initialQuantity, t
 
    
     const [quantity, setQuantity] = useState(initialQuantity);
-    const [updateQuantity, {isLoading: updating}] = useUpdateQuantityMutation();
+    const [updateQuantity,  {isLoading: updating}] = useUpdateQuantityMutation();
     const [removeFromCart, {isLoading: removing}] = useRemoveFromCartMutation();
+ 
     price = price * quantity;
     price = new Intl.NumberFormat('en-IN').format(price)
     const increment = () => {
@@ -40,8 +41,9 @@ export function CartCard({ id, title, image, price, quantity: initialQuantity, t
     }
 
     const removeHandler = () => {
-        removeFromCart({ token, productId: id })
-        refetch()
+        removeFromCart({ token, productId: id });
+    
+       
        
     }
 

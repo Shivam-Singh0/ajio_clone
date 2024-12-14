@@ -29,7 +29,9 @@ export const cartApi = createApi({
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      })
+       
+      }),
+      providesTags: ['Cart'], // Provides cache tags for Cart
     }),
     updateQuantity: builder.mutation({
       query: ({ token, productId, quantity }) => ({
@@ -51,8 +53,10 @@ export const cartApi = createApi({
         headers : {
           "Content-Type" : "application/json",
           Authorization : `Bearer ${token}`
-        }
-      })
+        },
+        
+      }),
+      invalidatesTags: ['Cart'], // Invalidate cache for Cart
     })
     
   }),

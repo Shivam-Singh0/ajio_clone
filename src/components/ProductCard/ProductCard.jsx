@@ -9,8 +9,9 @@ import {
 import { useGetSingleProductQuery } from "../../redux/apis/productsApiSlice";
 import { Link } from "react-router-dom";
 
-export function ProductCard({ product = null, id = null }) {
-  const { data, isLoading, error } = useGetSingleProductQuery(id, { skip: !id });
+export function ProductCard({ id = null }) {
+  const { data : product, isLoading, error } = useGetSingleProductQuery(id, { skip: !id });
+  
 
   if (isLoading) {
     return <Spinner className="h-16 w-16 text-gray-900/50 mx-auto mt-5" />;
@@ -20,16 +21,15 @@ export function ProductCard({ product = null, id = null }) {
     return <Typography color="red" className="text-center">Error loading product</Typography>;
   }
 
-  if (!product && data) {
-    product = data;
-  }
+  
+
 
   let price = product.price;
   price = Math.round(price * 83.93);
 
   return (
     <Link
-      to={`/product/${product._id}`}
+      to={`/product/${id}`}
       className="w-full md:w-1/2 lg:w-1/3 p-2 hover:scale-105 transition duration-300"
       state={{ product }}
     >
