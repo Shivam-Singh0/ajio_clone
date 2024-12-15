@@ -57,9 +57,33 @@ export const cartApi = createApi({
         
       }),
       invalidatesTags: ['Cart'], // Invalidate cache for Cart
+    }),
+    createOrder : builder.mutation({
+      query : ({token, products}) => ({
+        url: "/order",
+        method: "POST",
+        body: {products},
+        headers: {
+          "Content-Type" : "application/json",
+            Authorization : `Bearer ${token}`
+        }
+      })
+    }),
+
+    getOrders: builder.query({
+      query: (token) => ({
+        url: "/order",
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
     })
     
   }),
+
+  
 });
 
-export const {useAddToCartMutation, useGetCartQuery, useUpdateQuantityMutation, useRemoveFromCartMutation} = cartApi
+export const {useAddToCartMutation, useGetCartQuery, useUpdateQuantityMutation, useRemoveFromCartMutation, useCreateOrderMutation, useGetOrdersQuery} = cartApi

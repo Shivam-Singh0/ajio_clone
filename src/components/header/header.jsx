@@ -4,6 +4,7 @@ import {
     Typography,
     IconButton,
     Collapse,
+   
 } from "@material-tailwind/react";
 import { MdFavoriteBorder } from "react-icons/md";
 import { PiBag } from "react-icons/pi";
@@ -16,6 +17,8 @@ import { IoMdLogOut } from "react-icons/io";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import  { resetWishList } from "../../redux/features/wishList";
+import { MdAccountCircle } from "react-icons/md";
+import { PopOver } from "./PopOver";
 export function Header() {
     const [openNav, setOpenNav] = useState(false);
     const [authenticated, setAuthenticated] = useState(false);
@@ -102,9 +105,11 @@ export function Header() {
                                     <Link to={"/bag"} className=" rounded-full bg-ajio-1 hover:bg-ajio-2 text-white p-2">
                                         <PiBag size={25} />
                                     </Link>
+                                    <PopOver text={<MdAccountCircle size={45} />} link="orders"/>
                                     <IconButton className="rounded-full bg-ajio-1 hover:bg-ajio-2 text-white " >
                                         <IoMdLogOut size={25} onClick={logOutHandler} />
                                     </IconButton>
+                                   
                                 </>
                             ) : (
                                 <Link className="p-2 bg-ajio-1 hover:bg-ajio-2 text-white rounded-lg hidden lg:block" to={"/login"}>

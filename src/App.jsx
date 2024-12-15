@@ -10,6 +10,7 @@ import Product from "./components/pages/ProductsPage/Product"
 import WishList from "./components/pages/wishlist/WishList"
 import Bag from "./components/pages/Cart/Bag"
 import Success from "./components/pages/Cart/Success"
+import Orders from "./components/pages/Orders/orders"
 
 function App() {
  
@@ -31,6 +32,7 @@ function App() {
         <Route path="/wishlist" element={<WishList />} />
         <Route path="/bag" element={<Bag />} />
         <Route path="/success" element={<Success />} />
+        <Route path="/orders" element={<Orders />} />
       </Routes>
       </main>
     </Router>
